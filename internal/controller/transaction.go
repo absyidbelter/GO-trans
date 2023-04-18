@@ -21,7 +21,7 @@ func NewTransactionController(router *gin.RouterGroup, tu usecase.TransactionUse
 
 	router.GET("/transactions", tc.GetTransactions)
 	router.POST("/auth-mid/transfer", authMiddleware, tc.Transfer)
-	router.POST("/transfer.", tc.Transfer)
+	router.POST("/transfer", tc.Transfer)
 }
 
 func (tc *TransactionController) GetTransactions(ctx *gin.Context) {
