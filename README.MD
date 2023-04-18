@@ -11,7 +11,6 @@ This is a transaction-payment RESTful API project. The project is built with gol
 1. API documentation
 
 ## Database Design
-Transaction-payment-API/asset/Untitled.png
-
+<img src="./asset/Untitled.png" alt="e-wallet-ERD"/>
 ## API Documentation
 Transaction-payment-API/migration/req
