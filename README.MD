@@ -29,7 +29,7 @@ This is a transaction-payment RESTful API project. The project is built with gol
 [GIN-debug] GET    /v1/log                   --> GO-Payment/internal/controller.(*LogController).GetAllLogs-fm (3 handlers) 
 ```
 ## API Dokuemtation
-#### Login
+#### Get Profile
 
 ##### Request Method: GET
 ##### Request Path: 
@@ -68,39 +68,6 @@ http://127.0.0.1:8003/v1/profile
 ##### Request Method: POST
 ##### Request Path: 
 ```
-```json
-http://127.0.0.1:8003/v1/login
-
-```
-```json
-{
-  "status": "Success",
-  "data": [
-    {
-      "id": 1,
-      "name": "bima",
-      "email": "bima@example.com",
-      "password": "password123"
-    },
-    {
-      "id": 2,
-      "name": "budiatun",
-      "email": "budi@example.com",
-      "password": "mypassword"
-    },
-    {
-      "id": 3,
-      "name": "markzus",
-      "email": "markzus@example.com",
-      "password": "securepassword"
-    }
-  ]
-}
-```
-#### Login
-
-##### Request Method: POST
-##### Request Path: 
 ```
 ```json
 http://127.0.0.1:8003/v1/login
@@ -219,7 +186,7 @@ http://127.0.0.1:8003/v1/transactions
 ```
 #### GET LOG
 
-```
+``
 #####Request Method: GET
 ```
 
