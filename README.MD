@@ -13,10 +13,9 @@ This is a transaction-payment RESTful API project. The project is built with gol
 
 ## Database Design
 <img src="./asset/Untitled.png" alt="e-wallet-ERD"/>
+```
 
-## API Request JSON File
-
-### Source File: API/migration/req
+### API Request JSON File: ./migration/req
 
 ## API Dokuemtation
 
@@ -28,7 +27,6 @@ This is a transaction-payment RESTful API project. The project is built with gol
 [GIN-debug] POST   /v1/transfer              --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (3 handlers)
 [GIN-debug] GET    /v1/log                   --> GO-Payment/internal/controller.(*LogController).GetAllLogs-fm (3 handlers)
 
-```
 
 #### Login
 
