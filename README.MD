@@ -174,10 +174,27 @@ Status Code 404 Not Found if there are no transactions found
 http://127.0.0.1:8003/v1/transactions
 ```
 ```json
+
 {
-    "user_id": 2,
-    "destination_id": 1234,
-    "amount": 3000,
-    "status": "succes",
-    "created_at": "2023-04-18T13:51:30Z"
+  "user_id": 3,
+  "destination_id": "9876543210",
+  "amount": 100,
+  "history": "transfer 100 to user 1",
+  "payment_method_type": "wallets"
+}
+
+
+{
+  "data": {
+    "id": 0,
+    "user_id": 3,
+    "amount": 100,
+    "destination_id": "9876543210",
+    "history": "transfer 100 to user 1",
+    "created_at": "2023-04-19T10:36:49.279374928+07:00",
+    "updated_at": "2023-04-19T10:36:49.279374988+07:00",
+    "payment_method_type": "wallets"
+  },
+  "message": "Transfer successful",
+  "status": "success"
 }
