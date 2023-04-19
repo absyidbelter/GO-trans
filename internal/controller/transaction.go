@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -48,26 +49,40 @@ func (tc *TransactionController) GetTransactions(ctx *gin.Context) {
 	})
 }
 
-func (tc *TransactionController) Transfer(c *gin.Context) {
-	// Mendapatkan userID dari context
-	userID, ok := c.Get("userID")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get userID from context"})
-		return
-	}
-
-	var req model.TransferRequest
-	err := c.BindJSON(&req)
+func (tc *TransactionController) Transfer(ctx *gin.Context) {
+	var transferRequest model.TransferRequest
+	err := ctx.ShouldBindJSON(&transferRequest)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Failed to parse request",
+		})
 		return
 	}
 
-	transaction, err := tc.transactionUsecase.Transfer(userID.(int), req.DestinationID, float64(req.Amount), req.PaymentMethodType)
+	destinationID, err := strconv.Atoi(transferRequest.DestinationID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Failed to convert DestinationID to integer",
+		})
+		return
+	}
+	destinationWallet := &model.Wallet{ID: uint(destinationID)}
+
+	amount := int(transferRequest.Amount)
+	transaction, err := tc.transactionUsecase.Transfer(int(transferRequest.UserID), destinationWallet, amount, transferRequest.History)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, transaction)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Transfer successful",
+		"data":    transaction,
+	})
 }

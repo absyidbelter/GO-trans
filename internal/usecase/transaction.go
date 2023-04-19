@@ -3,13 +3,12 @@ package usecase
 import (
 	model "GO-Payment/internal/model/entity"
 	"GO-Payment/internal/repository"
-	"errors"
 	"time"
 )
 
 type TransactionUsecase interface {
 	GetAllTransactions() ([]*model.Transaction, error)
-	Transfer(senderID int, destinationID string, amount float64, history string) (*model.Transaction, error)
+	Transfer(senderID int, destinationWallet *model.Wallet, amount int, history string) (*model.Transaction, error)
 	CountTransactions(userID int) (int, error)
 }
 
@@ -33,58 +32,47 @@ func (tu *transactionUsecase) GetAllTransactions() ([]*model.Transaction, error)
 	return res, nil
 }
 
-func (tu *transactionUsecase) Transfer(senderID int, destinationID string, amount float64, history string) (*model.Transaction, error) {
+func (tu *transactionUsecase) Transfer(senderID int, destinationWallet *model.Wallet, amount int, history string) (*model.Transaction, error) {
+	// Get sender's wallet
 	senderWallet, err := tu.walletRepository.FindByUserID(uint(senderID))
 	if err != nil {
 		return nil, err
 	}
-
-	if senderWallet.Balance < int(amount) {
-		return nil, errors.New("Insufficient balance")
-	}
-
-	transaction := &model.Transaction{
-		UserID:            uint(senderID),
-		DestinationID:     destinationID,
-		Amount:            int(amount),
-		History:           history,
-		CreatedAt:         time.Now(),
-		UpdatedAt:         time.Now(),
-		PaymentMethodType: "transfer",
-	}
-
 	tx, err := tu.transactionRepository.Begin()
 	if err != nil {
 		return nil, err
 	}
 	defer func() {
-		if r := recover(); r != nil {
+		if err != nil {
 			tx.Rollback()
+			return
 		}
+		err = tx.Commit()
 	}()
 
-	transaction, err = tu.transactionRepository.Save(transaction)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	senderWallet.Balance -= transaction.Amount
+	senderWallet.Balance -= amount
 	_, err = tu.walletRepository.Update(senderWallet)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 
-	_, err = tu.walletRepository.DecreaseBalance(destinationID, transaction.Amount)
+	destinationWallet.Balance += amount
+	_, err = tu.walletRepository.Update(destinationWallet)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 
-	err = tx.Commit()
+	transaction := &model.Transaction{
+		UserID:            uint(senderID),
+		DestinationID:     destinationWallet.Number,
+		Amount:            amount,
+		History:           history,
+		CreatedAt:         time.Now(),
+		UpdatedAt:         time.Now(),
+		PaymentMethodType: "wallets",
+	}
+	transaction, err = tu.transactionRepository.Save(transaction)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 

@@ -26,7 +26,7 @@ func NewTransactionRepository(db *sql.DB) TransactionRepository {
 
 func (r *transactionRepository) FindAll(userID int, search string, sortBy string, sort string, limit int, page int) ([]*model.Transaction, error) {
 	if r.db == nil {
-		return nil, fmt.Errorf("database connection is nilssss")
+		return nil, fmt.Errorf("database connection is nil")
 	}
 	var transactions []*model.Transaction
 
@@ -80,33 +80,42 @@ func (r *transactionRepository) FindAll(userID int, search string, sortBy string
 		transactions = append(transactions, &transaction)
 	}
 
+	if len(transactions) == 0 {
+		return []*model.Transaction{}, nil
+	}
+
 	return transactions, nil
 }
 
 func (r *transactionRepository) Count(userID int) (int, error) {
-	var total int
+	var total sql.NullInt64
 	err := r.db.QueryRow(`SELECT COUNT(*) FROM transactions WHERE user_id = $1`, userID).Scan(&total)
 	if err != nil {
 		return 0, err
 	}
 
-	return total, nil
+	if !total.Valid {
+		return 0, nil
+	}
+
+	return int(total.Int64), nil
 }
+
 func (r *transactionRepository) Save(transaction *model.Transaction) (*model.Transaction, error) {
 	stmt, err := r.db.Prepare(`
-		INSERT INTO transactions (
-			user_id,
-			destination_id,
-			amount,
-			history,
-			created_at,
-			updated_at,
-			payment_method_type
-		) VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id
-	`)
+        INSERT INTO transactions (
+            user_id,
+            destination_id,
+            amount,
+            history,
+            created_at,
+            updated_at,
+            payment_method_type
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id
+    `)
 	if err != nil {
-		return transaction, err
+		return transaction, fmt.Errorf("failed to prepare statement: %v", err)
 	}
 	defer stmt.Close()
 
@@ -120,7 +129,7 @@ func (r *transactionRepository) Save(transaction *model.Transaction) (*model.Tra
 		transaction.PaymentMethodType,
 	).Scan(&transaction.ID)
 	if err != nil {
-		return transaction, err
+		return transaction, fmt.Errorf("failed to execute query: %v", err)
 	}
 
 	return transaction, nil
