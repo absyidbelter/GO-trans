@@ -3,20 +3,19 @@ This is a transaction-payment RESTful API project. The project is built with gol
 
 ## Features
 1. General Features
-1. Authentication and Authorization
-1. List of Transactions
-1. Transfer
-1. User Details
-1. Database SQL
-1. API documentation
+2. Authentication and Authorization
+3. List of Transactions
+4. Transfer
+5. User Details
+6. Log Transaksi
+7. Database SQL
+8. API documentation
 
 ## Database Design
 <img src="./asset/Untitled.png" alt="e-wallet-ERD"/>
 
-## API Documentation
-
-```
-Transaction-payment-API/migration/req
+## API Request JSON File
+### Source File: API/migration/req
 ```
 
 ## API Dokuemtation
