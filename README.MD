@@ -12,8 +12,12 @@ This is a transaction-payment RESTful API project. The project is built with gol
 
 ## Database Design
 <img src="./asset/Untitled.png" alt="e-wallet-ERD"/>
+
 ## API Documentation
+
+```
 Transaction-payment-API/migration/req
+```
 
 ## API Dokuemtation
 ```
@@ -27,10 +31,11 @@ Transaction-payment-API/migration/req
 
 ```
 
-#### GET PROFILE
+#### Login
 
-#####Request Method: GET
-#####Request Path: 
+##### Request Method: GET
+##### Request Path: 
+```
 
 ```json
 http://127.0.0.1:8003/v1/profile
@@ -59,7 +64,7 @@ http://127.0.0.1:8003/v1/profile
     }
   ]
 }
-
+```
 #### Login
 
 ##### Request Method: POST
@@ -93,7 +98,7 @@ http://127.0.0.1:8003/v1/login
     }
   ]
 }
-
+```
 #### Login
 
 ##### Request Method: POST
@@ -121,7 +126,7 @@ http://127.0.0.1:8003/v1/login
   }
 }
 
-
+```
 #### GET Transactions
 
 #####Request Method: GET
@@ -164,7 +169,7 @@ http://127.0.0.1:8003/v1/transactions
     }
   ]
 }
-
+```
 ###### In case of failure
 
 {
@@ -179,7 +184,7 @@ http://127.0.0.1:8003/v1/transactions
 Status Code 200 OK if successful
 Status Code 500 Internal Server Error if an error occurs during the process
 Status Code 404 Not Found if there are no transactions found
-
+```
 #####Request Path: 
 ```
 ```json
@@ -213,10 +218,16 @@ http://127.0.0.1:8003/v1/transactions
   "status": "success"
 }
 
+```
 #### GET LOG
 
+```
 #####Request Method: GET
+```
+
+```
 #####Request Path: 
+```
 
 ```
 http://127.0.0.1:8003/v1/log
