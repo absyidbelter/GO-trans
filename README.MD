@@ -15,11 +15,11 @@ This is a transaction-payment RESTful API project. The project is built with gol
 <img src="./asset/Untitled.png" alt="e-wallet-ERD"/>
 
 ## API Request JSON File
+
 ### Source File: API/migration/req
-```
 
 ## API Dokuemtation
-```
+
 [GIN-debug] GET    /v1/profile               --> GO-Payment/internal/controller.(*UserController).Profile-fm (3 handlers)
 [GIN-debug] POST   /v1/login                 --> GO-Payment/internal/controller.(*AuthController).HandleLogin-fm (3 handlers)
 [GIN-debug] POST   /v1/logout                --> GO-Payment/internal/controller.(*AuthController).Logout-fm (3 handlers)
