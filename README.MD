@@ -17,14 +17,14 @@ Transaction-payment-API/migration/req
 
 ## API Dokuemtation
 ```
-```json
-```
 [GIN-debug] GET    /v1/profile               --> GO-Payment/internal/controller.(*UserController).Profile-fm (3 handlers)
 [GIN-debug] POST   /v1/login                 --> GO-Payment/internal/controller.(*AuthController).HandleLogin-fm (3 handlers)
 [GIN-debug] POST   /v1/logout                --> GO-Payment/internal/controller.(*AuthController).Logout-fm (3 handlers)
 [GIN-debug] GET    /v1/transactions          --> GO-Payment/internal/controller.(*TransactionController).GetTransactions-fm (3 handlers)
 [GIN-debug] POST   /v1/auth-mid/transfer     --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (4 handlers)
 [GIN-debug] POST   /v1/transfer              --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (3 handlers)
+
+```
 
 #### GET PROFILE
 
