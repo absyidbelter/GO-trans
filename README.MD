@@ -23,6 +23,7 @@ Transaction-payment-API/migration/req
 [GIN-debug] GET    /v1/transactions          --> GO-Payment/internal/controller.(*TransactionController).GetTransactions-fm (3 handlers)
 [GIN-debug] POST   /v1/auth-mid/transfer     --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (4 handlers)
 [GIN-debug] POST   /v1/transfer              --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (3 handlers)
+[GIN-debug] GET    /v1/log                   --> GO-Payment/internal/controller.(*LogController).GetAllLogs-fm (3 handlers)
 
 ```
 
@@ -210,4 +211,34 @@ http://127.0.0.1:8003/v1/transactions
   },
   "message": "Transfer successful",
   "status": "success"
+}
+
+#### GET LOG
+
+#####Request Method: GET
+#####Request Path: 
+
+```
+http://127.0.0.1:8003/v1/log
+
+```
+```
+```json
+{
+  "status": "Success",
+  "message": "logs retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "event": "Transfer 100 from wallet 9876543210 to wallet 9876543210",
+      "created_at": "2023-04-19T11:27:08.983195Z"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "event": "Transfer 100 from wallet 9876543210 to wallet 9876543210",
+      "created_at": "2023-04-19T11:40:45.939568Z"
+    }
+  ]
 }

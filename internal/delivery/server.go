@@ -74,6 +74,7 @@ func (self *AppServer) v1() {
 	controller.NewUserHandler(baseRg, self.ucMgr.UserUsecase())
 	controller.NewAuthHandler(baseRg, self.ucMgr.AuthUsecase())
 	controller.NewTransactionController(baseRg, self.ucMgr.TransactionUsecase(), &self.secret)
+	controller.NewLogController(baseRg, self.ucMgr.LogUsecase())
 }
 
 func (self *AppServer) waitSignal() {

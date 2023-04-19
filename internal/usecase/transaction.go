@@ -3,6 +3,7 @@ package usecase
 import (
 	model "GO-Payment/internal/model/entity"
 	"GO-Payment/internal/repository"
+	"fmt"
 	"time"
 )
 
@@ -15,12 +16,14 @@ type TransactionUsecase interface {
 type transactionUsecase struct {
 	transactionRepository repository.TransactionRepository
 	walletRepository      repository.WalletRepository
+	logRepository         repository.LogRepository
 }
 
-func NewTransactionUsecase(transactionRepo repository.TransactionRepository, walletRepo repository.WalletRepository) TransactionUsecase {
+func NewTransactionUsecase(transactionRepo repository.TransactionRepository, walletRepo repository.WalletRepository, logRepo repository.LogRepository) TransactionUsecase {
 	return &transactionUsecase{
 		transactionRepository: transactionRepo,
 		walletRepository:      walletRepo,
+		logRepository:         logRepo,
 	}
 }
 
@@ -38,6 +41,7 @@ func (tu *transactionUsecase) Transfer(senderID int, destinationWallet *model.Wa
 	if err != nil {
 		return nil, err
 	}
+
 	tx, err := tu.transactionRepository.Begin()
 	if err != nil {
 		return nil, err
@@ -71,7 +75,18 @@ func (tu *transactionUsecase) Transfer(senderID int, destinationWallet *model.Wa
 		UpdatedAt:         time.Now(),
 		PaymentMethodType: "wallets",
 	}
+
 	transaction, err = tu.transactionRepository.Save(transaction)
+	if err != nil {
+		return nil, err
+	}
+
+	logEvent := fmt.Sprintf("Transfer %d from wallet %s to wallet %s", transaction.Amount, senderWallet.Number, destinationWallet.Number)
+	err = tu.logRepository.Save(&model.Log{
+		UserID:    transaction.UserID,
+		Event:     logEvent,
+		CreatedAt: time.Now(),
+	})
 	if err != nil {
 		return nil, err
 	}

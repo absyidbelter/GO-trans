@@ -22,6 +22,7 @@ type userUsecase struct {
 type USConfig struct {
 	UserRepository   repository.UserRepository
 	WalletRepository repository.WalletRepository
+	LogRepo          repository.LogRepository
 }
 
 func NewUserUsecase(c *USConfig) UserUsecase {
