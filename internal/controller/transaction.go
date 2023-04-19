@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -60,15 +59,8 @@ func (tc *TransactionController) Transfer(ctx *gin.Context) {
 		return
 	}
 
-	destinationID, err := strconv.Atoi(transferRequest.DestinationID)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Failed to convert DestinationID to integer",
-		})
-		return
-	}
-	destinationWallet := &model.Wallet{ID: uint(destinationID)}
+	destinationID := transferRequest.DestinationID
+	destinationWallet := &model.Wallet{Number: destinationID}
 
 	amount := int(transferRequest.Amount)
 	transaction, err := tc.transactionUsecase.Transfer(int(transferRequest.UserID), destinationWallet, amount, transferRequest.History)

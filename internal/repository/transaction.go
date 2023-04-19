@@ -72,7 +72,7 @@ func (r *transactionRepository) FindAll(userID int, search string, sortBy string
 			&transaction.Amount,
 			&transaction.CreatedAt,
 			&transaction.UpdatedAt,
-			&transaction.History,
+			&transaction.PaymentMethodType,
 		)
 		if err != nil {
 			return transactions, err
@@ -81,6 +81,7 @@ func (r *transactionRepository) FindAll(userID int, search string, sortBy string
 	}
 
 	if len(transactions) == 0 {
+		// no rows returned from query
 		return []*model.Transaction{}, nil
 	}
 
@@ -102,6 +103,17 @@ func (r *transactionRepository) Count(userID int) (int, error) {
 }
 
 func (r *transactionRepository) Save(transaction *model.Transaction) (*model.Transaction, error) {
+	// Check if destination_id is valid
+	var walletID string
+	err := r.db.QueryRow(`SELECT id FROM wallets WHERE number = $1`, transaction.DestinationID).Scan(&walletID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return transaction, fmt.Errorf("invalid destination_id: wallet with number %s does not exist", transaction.DestinationID)
+		}
+		return transaction, fmt.Errorf("failed to check destination_id: %v", err)
+	}
+
+	// Proceed with saving the transaction
 	stmt, err := r.db.Prepare(`
         INSERT INTO transactions (
             user_id,
@@ -119,6 +131,7 @@ func (r *transactionRepository) Save(transaction *model.Transaction) (*model.Tra
 	}
 	defer stmt.Close()
 
+	var id uint
 	err = stmt.QueryRow(
 		transaction.UserID,
 		transaction.DestinationID,
@@ -129,8 +142,10 @@ func (r *transactionRepository) Save(transaction *model.Transaction) (*model.Tra
 		transaction.PaymentMethodType,
 	).Scan(&transaction.ID)
 	if err != nil {
-		return transaction, fmt.Errorf("failed to execute query: %v", err)
+		return transaction, fmt.Errorf("failed to save transaction: %v", err)
 	}
+
+	transaction.ID = id
 
 	return transaction, nil
 }
