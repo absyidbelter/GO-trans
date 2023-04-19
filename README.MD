@@ -16,9 +16,13 @@ This is a transaction-payment RESTful API project. The project is built with gol
 Transaction-payment-API/migration/req
 
 ## API Dokuemtation
-POST /login
-Handles user login and returns a JWT token if the user is authenticated.
 
+[GIN-debug] GET    /v1/profile               --> GO-Payment/internal/controller.(*UserController).Profile-fm (3 handlers)
+[GIN-debug] POST   /v1/login                 --> GO-Payment/internal/controller.(*AuthController).HandleLogin-fm (3 handlers)
+[GIN-debug] POST   /v1/logout                --> GO-Payment/internal/controller.(*AuthController).Logout-fm (3 handlers)
+[GIN-debug] GET    /v1/transactions          --> GO-Payment/internal/controller.(*TransactionController).GetTransactions-fm (3 handlers)
+[GIN-debug] POST   /v1/auth-mid/transfer     --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (4 handlers)
+[GIN-debug] POST   /v1/transfer              --> GO-Payment/internal/controller.(*TransactionController).Transfer-fm (3 handlers)
 
 #### GET PROFILE
 
@@ -57,9 +61,10 @@ http://127.0.0.1:8003/v1/profile
 
 ##### Request Method: POST
 ##### Request Path: 
-
+```
 ```json
 http://127.0.0.1:8003/v1/login
+
 ```
 ```json
 {
@@ -90,9 +95,11 @@ http://127.0.0.1:8003/v1/login
 
 ##### Request Method: POST
 ##### Request Path: 
-
+```
 ```json
 http://127.0.0.1:8003/v1/login
+
+
 ```
 ```json
 {
@@ -121,10 +128,12 @@ Status Code 200 OK if successful
 Status Code 500 Internal Server Error if an error occurs during the process
 Status Code 404 Not Found if there are no transactions found
 
-#####Request Path: 
-
+##### Request Path: 
+```
 ```json
 http://127.0.0.1:8003/v1/transactions
+
+
 ```
 ```json
 {
@@ -169,9 +178,11 @@ Status Code 500 Internal Server Error if an error occurs during the process
 Status Code 404 Not Found if there are no transactions found
 
 #####Request Path: 
-
+```
 ```json
 http://127.0.0.1:8003/v1/transactions
+
+
 ```
 ```json
 
